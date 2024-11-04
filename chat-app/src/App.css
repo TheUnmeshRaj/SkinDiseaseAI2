@@ -1,0 +1,30 @@
+.App-Light {
+  background-color: rgba(33, 33, 33, .5);
+}
+.App-Dark {
+  background-color:rgba(33, 33, 33, .9);
+}
+.mode-Light{
+    background-image: url('./components/images/moon(2).jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50%;
+    width:30px;
+    height:30px;
+}
+.mode-Dark{
+  background-image: url('./components/images/sun.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  width:30px;
+  height:30px;
+}
+.app-login{
+    margin-left:10px ;
+    border-radius:10px;
+    padding-top: 6px;
+    padding-bottom: 5px;
+}

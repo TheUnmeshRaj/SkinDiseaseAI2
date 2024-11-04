@@ -1,0 +1,131 @@
+
+.body-container-Light{
+    padding-top: 0px;
+    display: flex;
+    flex-direction: column;
+    font-family: "Roboto", serif;
+    max-height: 600px;
+}
+.body-container-Dark{
+    padding-top: 0px;
+    display: flex;
+    flex-direction: column;
+    font-family: "Roboto", serif;
+    height: 100%;
+    color: white;
+}
+.ip-search{
+    display: flex;
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 20px;
+    width: 60%;
+    height: 40px;
+}
+.ip{
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    padding-left: 10px;
+    border:2px solid black;
+}
+.treatment-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.treatment{
+    width: calc(48vw * 1.5);
+    height: auto;
+    text-align: left;
+}
+.search-button{
+    position: absolute;
+    height: auto;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transform: translateX(+20%);
+    margin-top: 2px;;
+    right: 10px;
+    padding-top: 2.5px;
+    padding-bottom: 2.7px;
+    margin-right: 2px;
+}
+.search-button:hover{
+    cursor: pointer;
+}
+.magnifying-glass{
+    margin-top: 2px;
+    width:100%;
+}
+.header-txt-Dark{
+    color:white;
+}
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+}
+
+.spinner {
+    border: 8px solid lightgray;
+    border-top: 8px solid #333;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+.res-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    margin-left: 170px;
+    margin-top: 90px;
+    row-gap: 20px;
+    max-height: 600px;
+    overflow-y: auto;
+}
+.res{
+    font-size: large;
+    margin-left: 0px;
+}
+.query-box{
+    border-radius: 20px;
+    border: 1px solid darkgray ;
+    background-color: darkgray;
+    padding-left: 6px;
+    padding-right: 8px;
+    margin-left: 4px;
+    max-width: fit-content;
+    color:black
+}
+.res-desc-box{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    border: 1px solid darkgray ;
+    background-color: darkgray;
+    border-radius: 20px;
+    padding-top: 6px;
+    padding-left: 6px;
+    max-width: fit-content;
+    color:black;
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+}
+.header-lnk{
+    text-decoration: none;
+    color:black
+}

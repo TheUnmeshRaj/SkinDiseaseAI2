@@ -1,0 +1,107 @@
+.reg-box{
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.cover-box{
+    border: 1px solid #E0E0E0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    row-gap: 20px;
+    align-items: center;
+    background-color: darkgray;
+}
+.reg-hed{
+    margin-right: 40px;
+}
+.reg-user{
+    width: 100%;
+    height: 48px;
+    max-width: 200px;
+}
+.reg-email{
+    width: 100%;
+    height: 48px;
+    max-width: 200px;
+}
+.reg-pass{
+    width: 100%;
+    height: 48px;
+    max-width: 200px;
+}
+.reg-button{
+    width: 100%;
+    height: 48px;
+    border-radius: 100px;
+    background-color: #1161CA;
+    max-width: 200px;
+}
+.reg-login{
+    height: 48px;
+    border-radius: 100px;
+    width: 100%;
+    max-width: 400px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.log-box{
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.log-cover-box{
+    border: 1px solid #E0E0E0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-left: 40px;
+    padding-right: 40px;
+    row-gap: 20px;
+    align-items: center;
+    background-color: darkgray;
+}
+.log-hed{
+    margin-right: 60px;
+}
+.log-user{
+    width: 100%;
+    height: 48px;
+    max-width: 200px;
+}
+.log-pass{
+    width: 100%;
+    height: 48px;
+    max-width: 200px;
+}
+.log-button{
+    width: 100%;
+    height: 48px;
+    border-radius: 100px;
+    background-color: #1161CA;
+    max-width: 200px;
+}
+.log-reg{
+    height: 48px;
+    border-radius: 100px;
+    width: 100%;
+    max-width: 400px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
