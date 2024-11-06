@@ -3,7 +3,14 @@
  const authSchema = new mongoose.Schema({
     username:String,
     emailId:String,
-    password:String
+    password:String,
+    resData:[
+      {
+         query:String,
+         res:String,
+         treatment:String
+      }
+    ]
  })
 
  export const Auth = mongoose.model("Auth" , authSchema)

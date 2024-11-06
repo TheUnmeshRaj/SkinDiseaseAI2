@@ -28,3 +28,35 @@
     padding-top: 6px;
     padding-bottom: 5px;
 }
+.full-app {
+  display: flex;
+}
+
+.left-bar {
+  width: 250px; /* Adjust the width as necessary */
+  background-color: #f0f0f0; /* Suitable color for left bar */
+  padding: 10px; /* Add some padding for aesthetics */
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.full-app {
+  display: flex;
+  height: 100vh; /* Full viewport height */
+}
+
+.left-bar {
+  width: 250px; /* Fixed width for left bar */
+  background-color: #f0f0f0; /* Suitable color for left bar */
+  padding: 10px; /* Add some padding for aesthetics */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+}
+
+.app-content {
+  flex: 1; /* Allow this area to take the remaining space */
+  background-color: #fff; /* Background color for main content */
+  padding: 20px; /* Padding for main content */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}

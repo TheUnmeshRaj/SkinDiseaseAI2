@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import RegistrationPage from './components/RegistrationPage';
 import LoginPage from './components/LoginPage';
+import NoteState from './components/NoteState'; // Import your NoteState
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -23,14 +25,14 @@ const router = createBrowserRouter([
     element:<LoginPage/>
   }
 ]);
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router ={router}/>
+    <NoteState> {/* Wrap everything inside NoteState */}
+      <RouterProvider router={router}/>
+    </NoteState>
   </React.StrictMode>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

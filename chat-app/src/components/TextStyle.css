@@ -2,9 +2,10 @@
 .body-container-Light{
     padding-top: 0px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     font-family: "Roboto", serif;
     max-height: 600px;
+    overflow: hidden;
 }
 .body-container-Dark{
     padding-top: 0px;
@@ -90,23 +91,29 @@
 .res-box{
     display: flex;
     flex-direction: column;
-    justify-content: left;
-    margin-left: 170px;
     margin-top: 90px;
+    margin-left: auto;
+    margin-right: auto;
     row-gap: 20px;
     max-height: 600px;
+    max-width: fit-content;
     overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 10px;
 }
 .res{
     font-size: large;
     margin-left: 0px;
 }
 .query-box{
+    align-self: flex-end;
     border-radius: 20px;
     border: 1px solid darkgray ;
     background-color: darkgray;
-    padding-left: 6px;
-    padding-right: 8px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom:10px;
     margin-left: 4px;
     max-width: fit-content;
     color:black
@@ -128,4 +135,11 @@
 .header-lnk{
     text-decoration: none;
     color:black
+}
+@media all and (max-width:700px){
+    .res-box{
+        margin-left: auto;
+        margin-right: auto;
+        padding-right: 20px;
+    }
 }

@@ -6,12 +6,13 @@ function RegistrationPage() {
   const [username , setUsername] = useState('') 
   const [emailId , setEmailId] = useState('')
   const [password , setPassword] = useState('')
+  const [regUsers , setRegUsers] = useState([])
   const changeUser =(e)=>{
     setUsername(e.target.value)
   }
   const changeEmail =(e)=>{
     setEmailId(e.target.value)
-  }
+  } 
   const changePass =(e)=>{
     setPassword(e.target.value)
   }
@@ -20,6 +21,11 @@ function RegistrationPage() {
     .then((response)=>{
       const result = response.data
       console.log(result.message)
+      const newData =
+        [ ...regUsers,result.userID
+        ]
+      setRegUsers(newData)
+      console.log(result.userID)
     })
     .catch((error)=>{
       console.log(error)
