@@ -54,7 +54,9 @@ app.post("/Login", (req, res) => {
       if (user.password !== password) {
         return res.status(401).json({ err: "Password is incorrect" });
       }
-      res.status(200).json({ message: "Logged in successfully", userId: user._id.toString() });
+      res.status(200).json({ message: "Logged in successfully", userId: user._id.toString() ,
+        prevData : user.resData
+      });
     })
     .catch((err) => {
       console.error("Error validating login:", err);
@@ -64,10 +66,14 @@ app.post("/Login", (req, res) => {
 
 app.post("/", (req, res) => {
   const { currUserId, mainRes } = req.body;
+  console.log(mainRes);
 
   Auth.findOneAndUpdate(
     { _id: currUserId },
-    { $push: { resData: mainRes } },
+    {
+      $push: { resData: mainRes },
+      dataSent: true  // Instead of `$push`, directly set `dataSent: true`
+    },
     { new: true }
   )
     .then((result) => {
@@ -78,6 +84,7 @@ app.post("/", (req, res) => {
       res.status(400).json({ err: "Data could not be added" });
     });
 });
+
 
 // Start the server
 connectDb().then(() => {

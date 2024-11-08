@@ -4,11 +4,12 @@
     username:String,
     emailId:String,
     password:String,
+    dataSent:Boolean,
     resData:[
       {
          query:String,
          res:String,
-         treatment:String
+         desc:String
       }
     ]
  })

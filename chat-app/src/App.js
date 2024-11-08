@@ -11,10 +11,21 @@ import NoteContext from './components/NoteContext';
 
 function App() {
   const [mode, setMode] = useState('Light');
-  const [loggedIn, setLoggedIn] = useState(false);
-  const bodyElement = document.body;
-  const userId = useContext(NoteContext);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const bodyElement = document.body;
+  const { userId, setUserId , mainRes,setMainRes } = useContext(NoteContext);
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+  useEffect(() => {
+    const currUserId = userId ; 
+    localStorage.setItem("id", JSON.stringify(currUserId));
+  }, [userId]);
+  useEffect(()=>{
+    const currRes = mainRes ; 
+    localStorage.setItem("res", JSON.stringify(currRes));
+  },[mainRes])
   useEffect(() => {
     bodyElement.style.backgroundColor = mode === 'Dark' ? 'gray' : 'lightgray';
   }, [mode]);
@@ -22,7 +33,12 @@ function App() {
   const changeMode = () => {
     setMode((prev) => (prev === 'Light' ? 'Dark' : 'Light'));
   };
-
+  const button = (
+    <button className={`app-login-${userId !== '.' ? "LoggedIn" : "Login"}`}
+    onClick={userId!== '.' ? toggleDropdown : null}>
+{userId !== '.' ? "U" : "Login"}
+      </button>
+  );
   return (
       <div className={`App-${mode}`}>
         <div className={`social-media-${mode}`}>
@@ -34,11 +50,19 @@ function App() {
           </div>
           <div className="left-items">
             <button className={`mode-${mode}`} onClick={changeMode}></button>
-            <Link to="/Login">
-              <button className="app-login">
-                {userId ? "Logged In" : "Login"}
-              </button>
-            </Link>
+            {userId === '.' ? (
+        <Link to="/Login">{button}</Link>
+      ) : (
+        button
+      )}
+            {userId !== '.' && isDropdownOpen && (
+        <div 
+          className="dropdown-menu" 
+        >
+          <button className="dropdown-item" onClick={() => setUserId('.')}>Logout</button>
+          <button className="dropdown-item" onClick={() => setMainRes([])}>Clear</button>
+        </div>
+      )}
           </div>
         </div>
         <InputText mode={mode} />

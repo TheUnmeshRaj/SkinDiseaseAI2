@@ -12,8 +12,8 @@ function InputText(props) {
   const [heading, setHeading] = useState(headingTxt);
   const [loading, setLoading] = useState(false);
   const [explainPara, setExplainPara] = useState(InitialText);
-  const [mainRes, setMainRes] = useState([]);
   const { userId } = useContext(NoteContext);
+  const {mainRes , setMainRes} = useContext(NoteContext)
   const currUserId = userId;
 
   const fetchRes = () => {
@@ -33,9 +33,8 @@ function InputText(props) {
         setLoading(false);
       });
   };
-
   const storeRes = () => {
-    const data = { mainRes, currUserId };
+    const data = { mainRes, currUserId};
     axios.post("http://localhost:3002", data)
       .then((res) => {
         console.log(res.data.message);
