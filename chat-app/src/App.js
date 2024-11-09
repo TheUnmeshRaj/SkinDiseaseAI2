@@ -27,7 +27,7 @@ function App() {
     localStorage.setItem("res", JSON.stringify(currRes));
   },[mainRes])
   useEffect(() => {
-    bodyElement.style.backgroundColor = mode === 'Dark' ? 'gray' : 'lightgray';
+    bodyElement.style.backgroundColor = mode === 'Dark' ? '#343541' : 'white';
   }, [mode]);
 
   const changeMode = () => {

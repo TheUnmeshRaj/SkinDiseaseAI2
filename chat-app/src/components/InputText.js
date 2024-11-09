@@ -4,7 +4,7 @@ import axios from 'axios';
 import NoteContext from './NoteContext';
 import magnifyingGlass from './images/istockphoto-1151843591-612x612.png';
 const headingTxt = "Welcome to our Skin Disease Detection AI";
-const InitialText = "Your reliable companion for skin health! Our powerful AI tool uses cutting-edge technology to help identify and classify a wide range of skin conditions.";
+const InitialText = "Your reliable companion for skin health! Our advanced AI tool uses cutting-edge technology to accurately identify and classify a wide range of skin conditions. Whether you're concerned about a new spot, rash, or other issues, our system provides quick and reliable insights, helping you stay informed and proactive about your skin health.";
 
 function InputText(props) {
   const [inputText, setInputText] = useState('');
@@ -65,8 +65,8 @@ function InputText(props) {
     if (mainRes.length === 0) {
       return (
         <>
-          <h1 className="res">{heading}</h1>
-          <p className="treatment">{explainPara}</p>
+          <h1 className="hed-ini">{heading}</h1>
+          <p className="explain-ini">{explainPara}</p>
         </>
       );
     }

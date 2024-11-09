@@ -6,6 +6,7 @@
     font-family: "Roboto", serif;
     max-height: 618px;
     overflow: hidden;
+    background-color: white;
 }
 .body-container-Dark{
     padding-top: 0px;
@@ -15,6 +16,7 @@
     max-height: 618px;
     overflow: hidden;
     color: white;
+    background-color: #343541;
 }
 .ip-search{
     display: flex;
@@ -143,4 +145,15 @@
         margin-right: auto;
         padding-right: 20px;
     }
+}
+.hed-ini{
+    margin-left: 10px;
+    font-size: 30px;
+}
+.explain-ini{
+    margin-left: 10px;
+    width: calc(56vw * 1.5);
+    font-size: 20px;
+    height: auto;
+    text-align: left;
 }
