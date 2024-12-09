@@ -7,8 +7,8 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
-import RegistrationPage from './components/RegistrationPage';
-import LoginPage from './components/LoginPage';
+import RegistrationPage from './components/RegistrationPage/RegistrationPage';
+import LoginPage from './components/LoginPage/LoginPage';
 import NoteState from './components/NoteState'; // Import your NoteState
 
 const router = createBrowserRouter([
