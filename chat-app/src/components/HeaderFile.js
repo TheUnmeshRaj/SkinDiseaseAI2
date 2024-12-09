@@ -11,7 +11,7 @@ function HeaderFile(props) {
   };
   return (
       <Link to ="/" className='header-lnk' onClick={handleClick}>
-      <h1 className={`header-txt-${props.mode}`}> AI SKIN DOCTOR  </h1>
+      <h1 className={`header-txt-${props.mode}`}> SKIN DISEASE DETECTOR  </h1>
       </Link>
   )
 }
