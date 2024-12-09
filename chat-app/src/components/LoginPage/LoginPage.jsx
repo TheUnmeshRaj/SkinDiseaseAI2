@@ -40,6 +40,7 @@ function LoginPage() {
 
   return (
     <div className="login-container">
+      
       <div className="login-box">
         <h1 className="login-header">Welcome Back</h1>
 

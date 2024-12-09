@@ -14,23 +14,23 @@ import NoteState from './components/NoteState'; // Import your NoteState
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App/>,
+    element: <App />,
   },
   {
     path: "/Register",
-    element: <RegistrationPage/>,
+    element: <RegistrationPage />,
   },
   {
-    path : "/Login" ,
-    element:<LoginPage/>
+    path: "/Login",
+    element: <LoginPage />,
   }
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <NoteState> {/* Wrap everything inside NoteState */}
-      <RouterProvider router={router}/>
+    <NoteState>
+      <RouterProvider router={router} />
     </NoteState>
   </React.StrictMode>
 );
