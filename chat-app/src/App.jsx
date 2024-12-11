@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './App.css';
 import InputText from './components/InputText';
-import HeaderFile from './components/HeaderFile';
+import HeaderFile from './components/HeaderFile/HeaderFile';
 import SocialMedia from './components/SocialMedia/SocialMedia';
 import './components/HeaderStyle.css';
 import { Link } from 'react-router-dom';
