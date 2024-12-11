@@ -1,4 +1,24 @@
 /* Parent Container */
+/* Header Text Styles */
+.header-Light {
+  color: black !important;
+  font-weight: bold;
+}
+
+
+.header-Dark {
+  color: white;
+  font-weight: bold;
+}
+
+/* Header Alignment (if required) */
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60px; /* Adjust based on your requirements */
+}
+
 .c-buzzwords {
   display: flex;
   justify-content: center;
@@ -9,6 +29,8 @@
   font-weight: bold;
   height: 70px; /* Set height here */
 }
+
+
 
 /* Word Styling */
 .c-buzzwords__word {

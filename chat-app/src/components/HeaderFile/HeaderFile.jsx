@@ -22,9 +22,11 @@ const Buzzwords = ({ mode }) => {
       {text.split(' ').map((word, wordIndex) => (
         <div key={wordIndex} className="c-buzzwords__word">
           {word.split('').map((char, charIndex) => (
+            
             <span key={charIndex} className={`js_charTrigger c-buzzwords__charWrapper`}>
-              <span className={`c-buzzwords__char header-${mode}`}>{char}</span>
-            </span>
+            <span className={`c-buzzwords__char header-${mode}`}>{char}</span>
+          </span>
+          
           ))}
         </div>
       ))}
