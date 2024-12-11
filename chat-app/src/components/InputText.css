@@ -18,7 +18,7 @@ h1, h2, p {
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  min-height: 100vh;
+  max-height: 10vh;
 }
 
 .header {
@@ -58,7 +58,7 @@ h1, h2, p {
 
 .submit-button {
   padding: 10px 20px;
-  background-color: #4a90e2;
+  background-color: #a4aab0;
   color: white;
   border: none;
   border-radius: 4px;

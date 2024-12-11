@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa'; // Icons
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'; // Eye toggle
 import axios from 'axios';
-import '../FormStyle.css';
 import './RegistrationPage.css'; // Add new CSS file for custom styles
 
 function RegistrationPage() {

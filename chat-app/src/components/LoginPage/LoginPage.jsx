@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { FaUser, FaLock } from 'react-icons/fa'; // Icons for username and password
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai'; // Icons for show/hide password
 import axios from 'axios';
-import '../FormStyle.css';
 import './LoginPage.css';
 
 function LoginPage() {
