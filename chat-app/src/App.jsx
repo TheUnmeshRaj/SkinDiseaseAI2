@@ -1,46 +1,46 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import './App.css';
-import InputText from './components/InputText';
+import './components/HeaderFile/HeaderStyle.css';
+
 import HeaderFile from './components/HeaderFile/HeaderFile';
 import SocialMedia from './components/SocialMedia/SocialMedia';
-import './components/HeaderStyle.css';
-import { Link } from 'react-router-dom';
-import NoteState from './components/NoteState';
+import InputText from './components/InputText';
 import NoteContext from './components/NoteContext';
 
 function App() {
-  const [mode, setMode] = useState('Dark'); // Set default mode to Dark
+  const [mode, setMode] = useState('Dark'); // Default mode is Dark
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const bodyElement = document.body;
-  const { userId, setUserId , mainRes, setMainRes } = useContext(NoteContext);
+  const { userId, setUserId, mainRes, setMainRes } = useContext(NoteContext);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  // Toggle dropdown menu visibility
+  const toggleDropdown = () => setIsDropdownOpen((prev) => !prev);
 
+  // Save userId and mainRes to localStorage on change
   useEffect(() => {
-    const currUserId = userId; 
-    localStorage.setItem("id", JSON.stringify(currUserId));
+    localStorage.setItem('id', JSON.stringify(userId));
   }, [userId]);
 
   useEffect(() => {
-    const currRes = mainRes; 
-    localStorage.setItem("res", JSON.stringify(currRes));
+    localStorage.setItem('res', JSON.stringify(mainRes));
   }, [mainRes]);
 
+  // Apply background color based on the current mode
   useEffect(() => {
-    bodyElement.style.backgroundColor = mode === 'Dark' ? '#343541' : 'white'; // Apply background color based on mode
+    document.body.style.backgroundColor = mode === 'Dark' ? '#343541' : 'white';
   }, [mode]);
 
-  const changeMode = () => {
-    setMode((prev) => (prev === 'Light' ? 'Dark' : 'Light')); // Toggle between Light and Dark modes
-  };
+  // Toggle theme mode
+  const changeMode = () => setMode((prevMode) => (prevMode === 'Light' ? 'Dark' : 'Light'));
 
-  const button = (
-    <button className={`app-login-${userId !== '.' ? "LoggedIn" : "Login"}`}
-    onClick={userId !== '.' ? toggleDropdown : null}>
-      {userId !== '.' ? "U" : "Login"}
+  // Reusable button component
+  const renderButton = () => (
+    <button
+      className={`app-login-${userId !== '.' ? 'LoggedIn' : 'Login'}`}
+      onClick={userId !== '.' ? toggleDropdown : null}
+    >
+      {userId !== '.' ? 'U' : 'Login'}
     </button>
   );
 
@@ -55,11 +55,7 @@ function App() {
         </div>
         <div className="left-items">
           <button className={`mode-${mode}`} onClick={changeMode}></button>
-          {userId === '.' ? (
-            <Link to="/Login">{button}</Link>
-          ) : (
-            button
-          )}
+          {userId === '.' ? <Link to="/Login">{renderButton()}</Link> : renderButton()}
           {userId !== '.' && isDropdownOpen && (
             <div className="dropdown-menu">
               <button className="dropdown-item" onClick={() => setUserId('.')}>Logout</button>

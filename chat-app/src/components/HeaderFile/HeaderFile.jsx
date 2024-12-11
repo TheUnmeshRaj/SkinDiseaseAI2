@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import '../TextStyle.css';
 import './HeaderFile.css';
 
-const Buzzwords = () => {
+const Buzzwords = ({ mode }) => {
   useEffect(() => {
     const chars = document.querySelectorAll('.js_charTrigger');
     chars.forEach((char) => {
@@ -22,8 +22,8 @@ const Buzzwords = () => {
       {text.split(' ').map((word, wordIndex) => (
         <div key={wordIndex} className="c-buzzwords__word">
           {word.split('').map((char, charIndex) => (
-            <span key={charIndex} className="js_charTrigger c-buzzwords__charWrapper">
-              <span className="c-buzzwords__char">{char}</span>
+            <span key={charIndex} className={`js_charTrigger c-buzzwords__charWrapper`}>
+              <span className={`c-buzzwords__char header-${mode}`}>{char}</span>
             </span>
           ))}
         </div>

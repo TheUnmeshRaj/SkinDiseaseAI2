@@ -1,6 +1,25 @@
 *{
     margin:0;
 }
+/* Header Text Styles */
+.header-Light {
+    color: black;
+    font-weight: bold;
+  }
+  
+  .header-Dark {
+    color: white;
+    font-weight: bold;
+  }
+  
+  /* Header Alignment (if required) */
+  .header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px; /* Adjust based on your requirements */
+  }
+  
 .social-media-Light{
     display: flex;
     justify-content: space-between;

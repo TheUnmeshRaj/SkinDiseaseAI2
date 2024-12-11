@@ -1,9 +1,14 @@
 .App-Light {
-  background-color: rgba(33, 33, 33, .5);
+  background-color: white; 
+  color: black; 
 }
+
 .App-Dark {
-  background-color:rgba(33, 33, 33, .9);
+  background-color: #343541; 
+  color: white; 
 }
+
+
 .mode-Light{
     background-image: url('./components/images/moon(2).jpg');
     background-repeat: no-repeat;
