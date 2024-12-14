@@ -2,35 +2,58 @@ import torch
 from datasets import load_dataset
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from PIL import Image
 from sklearn.metrics.pairwise import cosine_similarity
-from transformers import (
-    AutoModel,
-    AutoModelForCausalLM,
-    AutoTokenizer,
-    GenerationConfig,
-)
+from torchvision import models, transforms
+from transformers import AutoModel, AutoTokenizer
 
 app = Flask(__name__)
 CORS(app)
 
-# Load the datasets
 dataset = load_dataset("Mostafijur/Skin_disease_classify_data")
 dataset1 = load_dataset("brucewayne0459/Skin_diseases_and_care")
 
-# Load models and tokenizers
 tokenizer1 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-detection")
 model1 = AutoModel.from_pretrained("Unmeshraj/skin-disease-detection")
 tokenizer2 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
 model2 = AutoModel.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
 
-# Prepare data
-queries, diseases, embeddings = [], [], []
+
+image_model = models.resnet18(pretrained=False)
+image_model.fc = torch.nn.Linear(image_model.fc.in_features, 7)
+image_model.load_state_dict(torch.load("chat-app/api/model.pth", map_location=torch.device('cpu')))
+
+
+image_model.eval()
+
+
+
+disease_classes = {
+    0: 'Acne and Rosacea',
+    1: 'Actinic Keratosis Basal Cell Carcinoma',
+    2: 'Nail Fungus',
+    3: 'Psoriasis Lichen Planus',
+    4: 'Seborrheic Keratoses',
+    5: 'Tinea Ringworm Candidiasis',
+    6: 'Warts Molluscum'
+}
+
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.5], [0.5])
+])
+
+
+
 def embed_text(text, tokenizer, model):
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
     with torch.no_grad():
         outputs = model(**inputs)
-    embeddings = outputs.last_hidden_state.mean(dim=1)
-    return embeddings
+    return outputs.last_hidden_state.mean(dim=1)
+
+
+queries, diseases, embeddings = [], [], []
 for example in dataset['train']:
     query = example['Skin_disease_classification']['query']
     disease = example['Skin_disease_classification']['disease']
@@ -49,35 +72,77 @@ for example in dataset1['train']:
     topic_embeddings.append(topic_embedding)
 
 
-# Function to find similar disease
-def find_similar_disease(input_query, queries, embeddings, tokenizer, model):
-    input_embedding = embed_text(input_query, tokenizer, model)
+def find_similar_disease(input_query):
+    input_embedding = embed_text(input_query, tokenizer1, model1)
     similarities = [cosine_similarity(input_embedding.detach().numpy(), emb.detach().numpy())[0][0] for emb in embeddings]
-    most_similar_idx = similarities.index(max(similarities))
-    return diseases[most_similar_idx]
+    return diseases[similarities.index(max(similarities))]
 
-# Function to find treatment plan
-def find_treatment_plan(disease_name, topics, topic_embeddings, tokenizer, model):
-    disease_embedding = embed_text(disease_name, tokenizer, model)
+
+def find_treatment_plan(disease_name):
+    disease_embedding = embed_text(disease_name, tokenizer2, model2)
     similarities = [cosine_similarity(disease_embedding.detach().numpy(), topic_emb.detach().numpy())[0][0] for topic_emb in topic_embeddings]
-    most_similar_idx = similarities.index(max(similarities))
-    return information[most_similar_idx]
+    return information[similarities.index(max(similarities))]
 
-# Flask route
+
+def predict_disease_from_image(image):
+    image_tensor = transform(image).unsqueeze(0)
+    with torch.no_grad():
+        outputs = image_model(image_tensor)
+        _, predicted = torch.max(outputs, 1)
+    return disease_classes[predicted.item()]
+
+@app.route('/api/ImageAi', methods=['POST'])
+def ImageResult():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({'error': 'No file selected'}), 400
+
+    try:
+        
+        img = Image.open(file.stream).convert('RGB')
+        img_tensor = transform(img).unsqueeze(0)
+
+        
+        with torch.no_grad():
+            outputs = image_model(img_tensor)
+            _, predicted = outputs.max(1)
+
+        
+        predicted_class = predicted.item()
+        predicted_disease = disease_classes[predicted_class]  
+        treatment_plan = find_treatment_plan(predicted_disease)
+
+        
+        cleaned_treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
+
+        return jsonify({
+            'result': predicted_disease,
+            'treatment': cleaned_treatment_plan
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/TextAi', methods=['POST'])
 def GenResult():
     data = request.get_json()
-    input_query = data.get('inputText')
-    similar_disease = find_similar_disease(input_query, queries, embeddings, tokenizer1, model1)
-    treatment_plan = find_treatment_plan(similar_disease, topics, topic_embeddings, tokenizer2, model2)
-    cleaned_treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
-    
-    # Construct response
-    result = {
-        'result': similar_disease,
-        'treatment': cleaned_treatment_plan
-    }
-    return jsonify(result)
+    if 'inputText' not in data:
+        return jsonify({'error': 'No input text provided'}), 400
+
+    input_query = data['inputText']
+    try:
+        similar_disease = find_similar_disease(input_query)
+        treatment_plan = find_treatment_plan(similar_disease)
+        cleaned_treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
+        return jsonify({
+            'result': similar_disease,
+            'treatment': cleaned_treatment_plan
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)

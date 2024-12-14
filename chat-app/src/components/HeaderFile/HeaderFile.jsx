@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import '../TextStyle.css';
 import './HeaderFile.css';
 
+
 const Buzzwords = ({ mode }) => {
   useEffect(() => {
     const chars = document.querySelectorAll('.js_charTrigger');

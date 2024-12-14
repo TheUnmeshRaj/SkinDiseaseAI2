@@ -16,19 +16,10 @@ function SocialMedia({ Theme }) {
 
   return (
     <div className="icons">
-      {/* LinkedIn Icon */}
-      <a
-        href="https://www.linkedin.com/in/unmeshraj"
-        target="_blank"
-        rel="noopener noreferrer"
-        className={`linkdin-icon linkdin-${Theme}`}
-      >
-        <img src={LinkdinLogo} alt="LinkedIn Logo" className="linkdin-logo" />
-      </a>
 
       {/* GitHub Icon */}
       <a
-        href="https://github.com/theUnmeshRaj"
+        href="https://github.com/TheUnmeshRaj/SkinDiseaseAI2"
         target="_blank"
         rel="noopener noreferrer"
         className={`github-icon github-${Theme}`}
