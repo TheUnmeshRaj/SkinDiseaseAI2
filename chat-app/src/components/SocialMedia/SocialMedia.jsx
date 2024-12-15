@@ -1,9 +1,7 @@
 import React from 'react';
-import InstaLogo from '../images/1000_F_298315933_FdK3b8wCs7EhYWlJqieSvmSgTOr9MSfR(2).png';
-import GoogleLogo from '../images/Google__G__logo.svg.png';
-import GithubLogoLight from '../images/GitHub-Mark-ea2971cee799 (2).png';
-import LinkdinLogo from '../images/sm_5b321c9756fc6.png';
-import GithubLogoDark from '../images/github-logo-git-hub-icon-with-text-on-white-and-black-background-free-vector-Dark.jpg';
+import GithubLogoLight from '../images/githubLight.png';
+import LinkdinLogo from '../images/LinkedInDark.png';
+import GithubLogoDark from '../images/githubDark.jpg';
 
 function SocialMedia({ Theme }) {
   const RenderGithubLogo = () => {

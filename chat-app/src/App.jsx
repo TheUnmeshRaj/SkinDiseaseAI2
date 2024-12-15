@@ -5,7 +5,7 @@ import './components/HeaderFile/HeaderStyle.css';
 
 import HeaderFile from './components/HeaderFile/HeaderFile';
 import SocialMedia from './components/SocialMedia/SocialMedia';
-import InputText from './components/InputText';
+import InputText from './components/InputText/InputText';
 import NoteContext from './components/NoteContext';
 
 function App() {
