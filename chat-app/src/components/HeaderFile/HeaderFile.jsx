@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import '../TextStyle.css';
 import './HeaderFile.css';
 
 
