@@ -27,14 +27,16 @@ function LoginPage() {
     setErrorMessage('');
 
     axios
-      .post('http://localhost:3002/Login', { username, password })
-      .then((response) => {
-        console.log('Login successful:', response.data.message);
-      })
-      .catch((err) => {
-        console.error('Login failed:', err);
-        setErrorMessage('Invalid username or password!');
-      });
+  .post('http://localhost:5000/Login', { username, password })
+  .then((response) => {
+    console.log('Login successful:', response.data.message);
+    // Handle successful login (maybe store token, redirect, etc.)
+  })
+  .catch((err) => {
+    console.error('Login failed:', err);
+    setErrorMessage('Invalid username or password!');
+  });
+
   };
 
   return (

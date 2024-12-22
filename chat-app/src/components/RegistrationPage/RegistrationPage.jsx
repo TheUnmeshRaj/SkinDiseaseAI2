@@ -28,18 +28,18 @@ function RegistrationPage() {
 
     setErrorMessage('');
     setSuccessMessage('');
-
     axios
-      .post('http://localhost:3002/Register', { username, emailId, password })
-      .then((response) => {
-        const result = response.data;
-        setSuccessMessage('Registration successful!');
-        console.log(result.message);
-      })
-      .catch((error) => {
-        setErrorMessage('Registration failed. Please try again.');
-        console.error(error);
-      });
+  .post('http://localhost:5000/Register', { username, emailId, password })
+  .then((response) => {
+    setSuccessMessage('Registration successful!');
+    console.log(response.data.message);
+    // Redirect to login or perform other actions
+  })
+  .catch((error) => {
+    setErrorMessage('Registration failed. Please try again.');
+    console.error(error);
+  });
+
   };
 
   return (
