@@ -30,7 +30,6 @@ image_model.eval()
 
 # llm = OpenAI(temperature=0.3, model="text-davinci-003")
 
-
 disease_classes = {
     0: 'Acne and Rosacea',
     1: 'Actinic Keratosis Basal Cell Carcinoma',
