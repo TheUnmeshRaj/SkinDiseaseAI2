@@ -55,7 +55,7 @@ def fetchDoctors(location, query, mode, backupQuery, backupMode):
 
         doctor_info = {
             "name": doctor['name'],
-            "profile_link": doctor['link'],
+            "link": doctor['link'],
             "qualifications": qualifications.get_text(strip=True) if qualifications else "Not available",
             "specializations": ", ".join([span.get_text(strip=True) for span in specializations.find_all("h2")]) if specializations else "Not available",
             "experience": experience.get_text(strip=True) if experience else "Not available",
@@ -75,10 +75,6 @@ def GenResult():
 
     input_query = data['inputText']
     try:
-        # Fetch disease and treatment plan (not modified in this code)
-        # similar_disease = find_similar_disease(input_query)
-        # treatment_plan = find_treatment_plan(similar_disease)
-
         # Just an example disease for testing
         similar_disease = "acne"  
         treatment_plan = "Follow a proper skincare routine including cleansing, exfoliating, and using acne medication."
