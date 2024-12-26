@@ -15,7 +15,7 @@ function InputText(props) {
   const [loading, setLoading] = useState(false);
   const [explainPara, setExplainPara] = useState(InitialText);
   const { userId } = useContext(NoteContext);
-  const {mainRes , setMainRes} = useContext(NoteContext)
+  const { mainRes, setMainRes } = useContext(NoteContext);
   const currUserId = userId;
 
   const fetchRes = () => {
@@ -23,7 +23,12 @@ function InputText(props) {
     axios.post("http://127.0.0.1:5000/api/TextAi", data)
       .then((response) => {
         const result = response.data;
-        const dataPack = { query: inputText, res: result.result, desc: result.treatment };
+        const dataPack = { 
+          query: inputText, 
+          res: result.result, 
+          desc: result.treatment,
+          doctors: result.doctors || []  // Add doctors' info to the result
+        };
         setMainRes((prevMainRes) => [...prevMainRes, dataPack]);
         setOutputText(''); 
       })
@@ -35,8 +40,9 @@ function InputText(props) {
         setLoading(false);
       });
   };
+
   const storeRes = () => {
-    const data = { mainRes, currUserId};
+    const data = { mainRes, currUserId };
     axios.post("http://localhost:3002", data)
       .then((res) => {
         console.log(res.data.message);
@@ -81,6 +87,19 @@ function InputText(props) {
           <h1 className="res">{`RESULT: ${item.res.toUpperCase()}`}</h1>
           <p className="treatment">{item.desc}</p>
         </div>
+        {item.doctors.length > 0 && (
+          <div className="doctor-details">
+            <h2>Recommended Doctors</h2>
+            {item.doctors.map((doctor, docIndex) => (
+              <div key={docIndex} className="doctor-card">
+                <h3>{doctor.name}</h3>
+                <p><strong>Qualifications:</strong> {doctor.qualifications}</p>
+                <p><strong>Clinics:</strong> {doctor.clinics}</p>
+                <a href={doctor.link} target="_blank" rel="noopener noreferrer" className="doctor-link">View Profile</a>
+              </div>
+            ))}
+          </div>
+        )}
       </React.Fragment>
     ));
   };

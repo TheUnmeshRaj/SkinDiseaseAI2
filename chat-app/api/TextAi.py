@@ -1,123 +1,72 @@
-import re
-import textwrap
-
-# from langchain.llms import OpenAI
-# from langchain.prompts import PromptTemplate
-import torch
-from datasets import load_dataset
+import requests
+from bs4 import BeautifulSoup
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from PIL import Image
-from sklearn.metrics.pairwise import cosine_similarity
-from torchvision import models, transforms
-from transformers import AutoModel, AutoTokenizer
 
-# import openai
 app = Flask(__name__)
 CORS(app)
 
-dataset = load_dataset("Mostafijur/Skin_disease_classify_data")
-dataset1 = load_dataset("brucewayne0459/Skin_diseases_and_care")
+# Fetch doctor data
+def fetchDoctors(location, query, mode, backupQuery, backupMode):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36"
+    }
 
-tokenizer1 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-detection")
-model1 = AutoModel.from_pretrained("Unmeshraj/skin-disease-detection")
-tokenizer2 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
-model2 = AutoModel.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
-image_model = models.resnet18(weights=None)
-image_model.fc = torch.nn.Linear(image_model.fc.in_features, 7)
-image_model.load_state_dict(torch.load("chat-app/api/model.pth", map_location=torch.device('cpu')))
-image_model.eval()
+    def fetch_from_url(query, mode):
+        url = f"https://www.practo.com/search/doctors?results_type=doctor&q=%5B%7B%22word%22%3A%22{query}%22%2C%22autocompleted%22%3Atrue%2C%22category%22%3A%22{mode}%22%7D%5D&city={location}"
+        response = requests.get(url, headers=headers)
+        if response.status_code != 200:
+            return [], response.status_code
+        
+        soup = BeautifulSoup(response.text, "html.parser")
+        doctor_data = []
+        
+        for anchor in soup.find_all("a", href=True, class_=False):
+            if "/doctor/" in anchor["href"]:
+                name = anchor.find("h2", class_="doctor-name").get_text(strip=True) if anchor.find("h2", class_="doctor-name") else "Unknown"
+                link = "https://www.practo.com" + anchor["href"]
+                doctor_data.append({"name": name, "link": link})
+        
+        return doctor_data, response.status_code
 
-# llm = OpenAI(temperature=0.3, model="text-davinci-003")
+    doctor_data, status_code = fetch_from_url(query, mode)
 
-disease_classes = {
-    0: 'Acne and Rosacea',
-    1: 'Actinic Keratosis Basal Cell Carcinoma',
-    2: 'Nail Fungus',
-    3: 'Psoriasis Lichen Planus',
-    4: 'Seborrheic Keratoses',
-    5: 'Tinea Ringworm Candidiasis',
-    6: 'Warts Molluscum'
-}
+    if not doctor_data:
+        doctor_data, status_code = fetch_from_url(backupQuery, backupMode)
 
-transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.5], [0.5])
-])
+    if not doctor_data:
+        return {"error": f"Failed to fetch doctors. Status Code: {status_code}"}
 
-def embed_text(text, tokenizer, model):
-    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
-    with torch.no_grad():
-        outputs = model(**inputs)
-    return outputs.last_hidden_state.mean(dim=1)
+    doctors_info = []
 
-queries, diseases, embeddings = [], [], []
-for example in dataset['train']:
-    query = example['Skin_disease_classification']['query']
-    disease = example['Skin_disease_classification']['disease']
-    queries.append(query)
-    diseases.append(disease)
-    query_embedding = embed_text(query, tokenizer1, model1)
-    embeddings.append(query_embedding)
+    for doctor in doctor_data:
+        if doctor["name"] == "Unknown":
+            continue
 
-topics, information, topic_embeddings = [], [], []
-for example in dataset1['train']:
-    topic = example['Topic']
-    info = example['Information']
-    topics.append(topic)
-    information.append(info)
-    topic_embedding = embed_text(topic, tokenizer2, model2)
-    topic_embeddings.append(topic_embedding)
+        profile_response = requests.get(doctor["link"], headers=headers)
+        if profile_response.status_code != 200:
+            continue
 
-def find_similar_disease(input_query):
-    input_embedding = embed_text(input_query, tokenizer1, model1)
-    similarities = [cosine_similarity(input_embedding.detach().numpy(), emb.detach().numpy())[0][0] for emb in embeddings]
-    return diseases[similarities.index(max(similarities))]
+        profile_soup = BeautifulSoup(profile_response.text, "html.parser")
+        qualifications = profile_soup.find("p", class_="c-profile__details", attrs={"data-qa-id": "doctor-qualifications"})
+        specializations = profile_soup.find("div", class_="c-profile__details", attrs={"data-qa-id": "doctor-specializations"})
+        experience = profile_soup.find("h2", string=lambda text: text and "Years Experience" in text)
+        clinics = profile_soup.find_all("p", class_="c-profile--clinic__address")
 
-def find_treatment_plan(disease_name):
-    disease_embedding = embed_text(disease_name, tokenizer2, model2)
-    similarities = [cosine_similarity(disease_embedding.detach().numpy(), topic_emb.detach().numpy())[0][0] for topic_emb in topic_embeddings]
-    return information[similarities.index(max(similarities))]
+        doctor_info = {
+            "name": doctor['name'],
+            "profile_link": doctor['link'],
+            "qualifications": qualifications.get_text(strip=True) if qualifications else "Not available",
+            "specializations": ", ".join([span.get_text(strip=True) for span in specializations.find_all("h2")]) if specializations else "Not available",
+            "experience": experience.get_text(strip=True) if experience else "Not available",
+            "clinics": [clinic.get_text(strip=True) for clinic in clinics] if clinics else ["No clinics listed"]
+        }
+        
+        doctors_info.append(doctor_info)
 
-def predict_disease_from_image(image):
-    image_tensor = transform(image).unsqueeze(0)
-    with torch.no_grad():
-        outputs = image_model(image_tensor)
-        _, predicted = torch.max(outputs, 1)
-    return disease_classes[predicted.item()]
+    return doctors_info
 
-@app.route('/api/ImageAi', methods=['POST'])
-def ImageResult():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file uploaded'}), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No file selected'}), 400
-
-    try:
-        print(file.filename)  # Check if file is received
-        img = Image.open(file.stream).convert('RGB')
-        img_tensor = transform(img).unsqueeze(0)
-
-        with torch.no_grad():
-            outputs = image_model(img_tensor)
-            _, predicted = outputs.max(1)
-
-        predicted_class = predicted.item()
-        predicted_disease = disease_classes[predicted_class]
-        treatment_plan = find_treatment_plan(predicted_disease)
-
-        cleaned_treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
-
-        return jsonify({
-            'result': predicted_disease,
-            'treatment': cleaned_treatment_plan
-        })
-
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+# Routes
 @app.route('/api/TextAi', methods=['POST'])
 def GenResult():
     data = request.get_json()
@@ -126,98 +75,30 @@ def GenResult():
 
     input_query = data['inputText']
     try:
-        similar_disease = find_similar_disease(input_query)
-        treatment_plan = find_treatment_plan(similar_disease)
-        cleaned_treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
+        # Fetch disease and treatment plan (not modified in this code)
+        # similar_disease = find_similar_disease(input_query)
+        # treatment_plan = find_treatment_plan(similar_disease)
+
+        # Just an example disease for testing
+        similar_disease = "acne"  
+        treatment_plan = "Follow a proper skincare routine including cleansing, exfoliating, and using acne medication."
+
+        # Fetch doctor information
+        location = "bangalore"
+        query = similar_disease.replace(" ", "%20")
+        mode = "symptom"
+        backupQuery = "dermatologist"
+        backupMode = "service"
+
+        doctor_info = fetchDoctors(location, query, mode, backupQuery, backupMode)
+
         return jsonify({
             'result': similar_disease,
-            'treatment': cleaned_treatment_plan
+            'treatment': treatment_plan,
+            'doctors': doctor_info
         })
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
-'''
-----------------------------------------------------------------------------------------------------------
-            Manual 
-def format_manually(treatment_plan):
-    cleaned_text = re.sub(r"\*", "", treatment_plan)
-    sentences = re.split(r'\. |\n', cleaned_text)
-    formatted_sentences = [
-        textwrap.fill(sentence.strip(), width=80)
-        for sentence in sentences if sentence.strip()
-    ]
-    return "\n".join(formatted_sentences)
-
-@app.route('/api/TextAi', methods=['POST'])
-def GenResult():
-    data = request.get_json()
-    if 'inputText' not in data:
-        return jsonify({'error': 'No input text provided'}), 400
-
-    input_query = data['inputText']
-    try:
-        similar_disease = find_similar_disease(input_query)
-        treatment_plan = find_treatment_plan(similar_disease)
-        
-        cleaned_treatment_plan = format_manually(treatment_plan)
-        
-        return jsonify({
-            'result': similar_disease,
-            'treatment': cleaned_treatment_plan
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-----------------------------------------------------------------------------------------------------------
-'''
-'''
-----------------------------------------------------------------------------------------------------------
-        LANGCHAIN
-----------------------------------------------------------------------------------------------------------
-def format_with_langchain(treatment_plan):
-    template = """
-    Given the following treatment plan, format it into a clean, readable structure:
-    {treatment_plan}
-    """
-    prompt = PromptTemplate(input_variables=["treatment_plan"], template=template)
-    formatted_text = llm(prompt.format(treatment_plan=treatment_plan))
-    return formatted_text
-----------------------------------------------------------------------------------------------------------
-'''
-'''
-openai.api_key = 'your-api-key-here'
-
-def format_with_openai(treatment_plan):
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",  # You can use 'gpt-3.5-turbo' if preferred
-            prompt=f"Format the following treatment plan neatly:\n{treatment_plan}",
-            max_tokens=500,
-            temperature=0.3
-        )
-        return response['choices'][0]['text'].strip()
-    except Exception as e:
-        return str(e)  # In case of an error, return the error message
-
-
-@app.route('/api/TextAi', methods=['POST'])
-def GenResult():
-    data = request.get_json()
-    if 'inputText' not in data:
-        return jsonify({'error': 'No input text provided'}), 400
-
-    input_query = data['inputText']
-    try:
-        similar_disease = find_similar_disease(input_query)
-        treatment_plan = find_treatment_plan(similar_disease)
-        cleaned_treatment_plan = format_with_openai(treatment_plan)
-        
-        return jsonify({
-            'result': similar_disease,
-            'treatment': cleaned_treatment_plan
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-'''
 
 if __name__ == '__main__':
     app.run(debug=True)

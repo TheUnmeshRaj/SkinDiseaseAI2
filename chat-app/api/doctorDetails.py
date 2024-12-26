@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
+from flask import Flask, jsonify, request
 
+app = Flask(__name__)
 
 def fetchDoctors(location, query, mode, backupQuery, backupMode):
     headers = {
@@ -29,63 +31,58 @@ def fetchDoctors(location, query, mode, backupQuery, backupMode):
 
     
     if not doctor_data:
-        print(f"No doctors found for '{query}'. Trying the backup query: '{backupQuery}'.")
         doctor_data, status_code = fetch_from_url(backupQuery, backupMode)
 
     
     if not doctor_data:
-        return f"Failed to fetch doctors. Status Code: {status_code}"
+        return {"error": f"Failed to fetch doctors. Status Code: {status_code}"}
 
+    doctors_info = []
     
     for doctor in doctor_data:
         if doctor["name"] == "Unknown":
             continue  
 
-        print(f"Doctor: {doctor['name']}")
-        
         profile_response = requests.get(doctor["link"], headers=headers)
         if profile_response.status_code != 200:
-            print("   Failed to fetch doctor's profile page.")
-            print("-" * 30)
             continue
 
         profile_soup = BeautifulSoup(profile_response.text, "html.parser")
 
-        
         qualifications = profile_soup.find("p", class_="c-profile__details", attrs={"data-qa-id": "doctor-qualifications"})
         specializations = profile_soup.find("div", class_="c-profile__details", attrs={"data-qa-id": "doctor-specializations"})
         experience = profile_soup.find("h2", string=lambda text: text and "Years Experience" in text)
-
-        
         clinics = profile_soup.find_all("p", class_="c-profile--clinic__address")
-        
-        
-        if qualifications:
-            print(f"   Qualifications: {qualifications.get_text(strip=True)}")
-        if specializations:
-            spec_list = [span.get_text(strip=True) for span in specializations.find_all("h2")]
-            print(f"   Specializations: {', '.join(spec_list)}")
-        if experience:
-            print(f"   {experience.get_text(strip=True)}")
-        print()
-     
-        
-        if clinics:
-            for idx, clinic in enumerate(clinics, start=1):
-                clinic_address = clinic.get_text(strip=True)
-                print(f"   Clinic {idx}: {clinic_address}")
-        else:
-            print("   No clinic addresses found.")
-        print()
-        print(f"For more details and to book a slot please visit the link: {doctor['link']}")
-        
-        print("-" * 70)
 
+        doctor_info = {
+            "name": doctor['name'],
+            "profile_link": doctor['link'],
+            "qualifications": qualifications.get_text(strip=True) if qualifications else "Not available",
+            "specializations": ", ".join([span.get_text(strip=True) for span in specializations.find_all("h2")]) if specializations else "Not available",
+            "experience": experience.get_text(strip=True) if experience else "Not available",
+            "clinics": [clinic.get_text(strip=True) for clinic in clinics] if clinics else ["No clinics listed"]
+        }
+        
+        doctors_info.append(doctor_info)
 
-location = "patna"  
-query = "acne"
-backupQuery = "dermatologist"
-backupMode = "service"
-query = query.replace(" ", "%20")
-mode = "symptom"
-fetchDoctors(location, query, mode, backupQuery, backupMode)
+    return doctors_info
+
+@app.route('/get_doctors', methods=['GET'])
+def get_doctors():
+    location = request.args.get('location', default='bangalore')
+    query = request.args.get('query', default='acne')
+    backupQuery = request.args.get('backupQuery', default='dermatologist')
+    backupMode = request.args.get('backupMode', default='service')
+    mode = request.args.get('mode', default='symptom')
+
+    query = query.replace(" ", "%20")
+
+    doctor_data = fetchDoctors(location, query, mode, backupQuery, backupMode)
+    
+    if 'error' in doctor_data:
+        return jsonify(doctor_data), 500
+
+    return jsonify(doctor_data), 200
+
+if __name__ == '__main__':
+    app.run(debug=True)

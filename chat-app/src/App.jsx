@@ -55,13 +55,6 @@ function App() {
         </div>
         <div className="left-items">
           <button className={`mode-${mode}`} onClick={changeMode}></button>
-          {userId === '.' ? <Link to="/Login">{renderButton()}</Link> : renderButton()}
-          {userId !== '.' && isDropdownOpen && (
-            <div className="dropdown-menu">
-              <button className="dropdown-item" onClick={() => setUserId('.')}>Logout</button>
-              <button className="dropdown-item" onClick={() => setMainRes([])}>Clear</button>
-            </div>
-          )}
         </div>
       </div>
       <InputText mode={mode} />
