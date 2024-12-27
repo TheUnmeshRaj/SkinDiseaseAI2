@@ -16,38 +16,45 @@ function InputText(props) {
   const [explainPara, setExplainPara] = useState(InitialText);
   const { userId } = useContext(NoteContext);
   const { mainRes, setMainRes } = useContext(NoteContext);
+  const currUserId = userId;
 
-  const fetchRes = async () => {
-    try {
-      const response = await axios.post("http://127.0.0.1:5000/api/TextAi", { inputText });
-      const result = response.data;
-      console.log(result); // Log the result to inspect its structure
-      const dataPack = { 
-        query: inputText, 
-        res: result.result, 
-        desc: result.treatment,
-        doctors: result.doctors || []  
-      };
-      setMainRes((prevMainRes) => [...prevMainRes, dataPack]);
-      setOutputText(''); 
-    } catch (error) {
-      setOutputText('Error fetching result');
-      console.error("Error:", error);
-    } finally {
-      setLoading(false);
-    }
+  const fetchRes = () => {
+    const data = { inputText };
+    axios.post("http://127.0.0.1:5000/api/TextAi", data)
+      .then((response) => {
+        const result = response.data;
+        // Ensure doctors exist in response
+        const dataPack = { 
+          query: inputText, 
+          res: result.result || "No result found", // Fallback if no result
+          desc: result.treatment || "No treatment found", // Fallback if no treatment
+          doctors: result.doctors || []  // Add doctors' info to the result
+        };
+        setMainRes((prevMainRes) => [...prevMainRes, dataPack]);
+        setOutputText(''); 
+      })
+      .catch((error) => {
+        setOutputText('Error fetching result');
+        console.error("Error:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
-  const storeRes = async () => {
-    try {
-      await axios.post("http://localhost:3002", { mainRes, userId });
-    } catch (err) {
-      console.log("Error storing data:", err);
-    }
+  const storeRes = () => {
+    const data = { mainRes, currUserId };
+    axios.post("http://localhost:3002", data)
+      .then((res) => {
+        console.log(res.data.message);
+      })
+      .catch((err) => {
+        console.log("Error storing data:", err);
+      });
   };
 
   const handleClick = () => {
-    if (inputText.trim() === '') {
+    if (inputText === '') {
       setHeading('Please Enter Your Symptoms');
       setExplainPara('');
     } else {
@@ -82,22 +89,18 @@ function InputText(props) {
           <p className="treatment">{item.desc}</p>
         </div>
         {item.doctors.length > 0 && (
-    <div className="doctor-details">
-        <h2>Recommended Doctors</h2>
-        {item.doctors.map((doctor, docIndex) => (
-            <div key={docIndex} className="doctor-card">
+          <div className="doctor-details">
+            <h2>Recommended Doctors</h2>
+            {item.doctors.map((doctor, docIndex) => (
+              <div key={docIndex} className="doctor-card">
                 <h3>{doctor.name}</h3>
-                <p><strong>Qualifications:</strong><br />{doctor.qualifications}</p>
-                <p><strong>Clinics:</strong><br />{doctor.clinics}</p>
-                {doctor.link ? (
-                    <a href={doctor.link} target="_blank" rel="noopener noreferrer" className="doctor-link">View Profile</a>
-                ) : (
-                    <span>No profile available</span> // Fallback if no link is present
-                )}
-            </div>
-        ))}
-    </div>
-)}
+                <p><strong>Qualifications:</strong> {doctor.qualifications || "Not available"}</p>
+                <p><strong>Clinics:</strong> {doctor.clinics.join(', ') || "Not available"}</p>
+                <a href={doctor.link} target="_blank" rel="noopener noreferrer" className="doctor-link">View Profile</a>
+              </div>
+            ))}
+          </div>
+        )}
       </React.Fragment>
     ));
   };

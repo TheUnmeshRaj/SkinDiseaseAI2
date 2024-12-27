@@ -4,7 +4,9 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
-  color: #333;
+  background-image: url("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/src/components/InputText/ok.gif");
+  background-position: 8px center; 
+
 }
 
 h1, h2, p {
@@ -65,7 +67,7 @@ h1, h2, p {
 .doctor-card {
   margin-bottom: 20px;
   padding: 10px;
-  background-color: #4f3a3a;
+  background-color: #6897b2;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: add some shadow for depth */
 }
@@ -104,28 +106,30 @@ h1, h2, p {
 }
 
 .doctor-link:hover::before {
-    opacity:1; /* Fade in to fully opaque on hover */
+  opacity:1; /* Fade in to fully opaque on hover */
 }
 
 .res-box {
+  background-image: url("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/src/components/InputText/ok.gif");
+  
   display: flex;
   flex-direction: column;
-  margin-top: 100px; /* Slightly increased top margin */
-  margin-left: auto;
+  margin-top: 70px; /* Slightly increased top margin */
   margin-right: auto;
   row-gap: 25px; /* Increased row gap for better spacing */
   max-height: 600px; /* Increased max-height for more space */
   overflow-y: auto;
-  overflow-x: hidden;
-  padding-right: 15px; /* Increased padding for better alignment */
-  border-radius: 12px; /* Rounded corners for a smoother look */
+  scrollbar-width: thin;  /* Firefox */
+  scrollbar-color: #f1f1f1 #f1f1f1;  /* Chrome, Edge */
+
+
   padding: 20px; /* Added padding inside for better content spacing */
 }
 
 .res {
   font-size: 1.2rem; /* Slightly larger font for readability */
   margin-left: 0px;
-  color: #007bff; /* Changed to blue text color */
+  color: #09488b; /* Changed to blue text color */
   font-weight: 600; /* Bold font for emphasis */
 }
 
