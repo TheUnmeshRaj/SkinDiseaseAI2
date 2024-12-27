@@ -1,3 +1,4 @@
+/* Light Mode */
 .App-Light {
   background-color: white; 
   color: black; 
@@ -8,17 +9,16 @@
   color: white; 
 }
 
-
-
 .mode-Light{
-    background-image: url('./components/images/moon.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    border-radius: 50%;
-    width:30px;
-    height:30px;
+  background-image: url('./components/images/moon.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+  width:30px;
+  height:30px;
 }
+
 .mode-Dark{
   background-image: url('./components/images/sun.jpg');
   background-repeat: no-repeat;
@@ -28,22 +28,25 @@
   width:30px;
   height:30px;
 }
-.app-login-LoggedIn{
-    margin-left:10px ;
-    border-radius:50%;
-    width:30px;
-    height:30px;
-    padding-top: 6px;
-    padding-bottom: 5px;
-    background-color: lightblue;
+
+.app-login-LoggedIn {
+  margin-left:10px ;
+  border-radius:50%;
+  width:30px;
+  height:30px;
+  padding-top: 6px;
+  padding-bottom: 5px;
+  background-color: lightblue;
 }
-.app-login-Login{
+
+.app-login-Login {
   margin-left:10px ;
   border-radius:20px;
   padding-top: 6px;
   padding-bottom: 5px;
   background-color: lightgray;
 }
+
 .full-app {
   display: flex;
 }
@@ -53,6 +56,7 @@
   background-color: #f0f0f0; 
   padding: 10px;
 }
+
 html, body {
   height: 100%;
   margin: 0;
@@ -69,17 +73,38 @@ html, body {
   padding: 10px; 
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); 
 }
+
 .app-content {
   flex: 1;
   background-color: #fff; 
   padding: 20px; 
   overflow-y: auto; 
 }
-.dropdown-menu{
+
+.dropdown-menu {
   display: flex;
   margin-left: 10px;
   column-gap: 5px;
 }
-.dropdown-item{
+
+.dropdown-item {
   border-radius: 10px;
+}
+
+/* Dark Mode */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+.left-bar.dark-mode {
+  background-color: #333;
+}
+
+.app-content.dark-mode {
+  background-color: #222;
+}
+
+.dropdown-item.dark-mode {
+  background-color: #444;
 }

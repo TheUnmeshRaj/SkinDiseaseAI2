@@ -1,3 +1,5 @@
+import random
+
 import requests
 import torch
 from bs4 import BeautifulSoup
@@ -106,8 +108,11 @@ def fetchDoctors(location, query, mode, backupQuery, backupMode, locality):
             "clinics": [clinic.get_text(strip=True) for clinic in clinics] if clinics else ["No clinics listed"]
         }
         doctors_info.append(doctor_info)
-
-    return doctors_info
+    temp_info = []
+    for _ in range(3):
+        random_index = random.randint(0, len(doctors_info) - 1)
+        temp_info.append(doctors_info[random_index])
+    return temp_info
 
 @app.route('/api/TextAi', methods=['POST'])
 def GenResult():
@@ -115,12 +120,14 @@ def GenResult():
     if 'inputText' not in data:
         return jsonify({'error': 'No input text provided'}), 400
 
+    input_query = data['inputText']
     try:
-        input_query = data['inputText']
+        
         similar_disease = find_similar_disease(input_query)
         treatment_plan = find_treatment_plan(similar_disease)
-        cleaned_treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
+        treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
 
+        
         locality = "indiranagar"
         location = "bangalore"
         query = similar_disease.replace(" ", "%20")
@@ -128,30 +135,17 @@ def GenResult():
         backupQuery = "dermatologist"
         backupMode = "service"
 
+        
         doctor_info = fetchDoctors(location, query, mode, backupQuery, backupMode, locality)
 
         return jsonify({
             'disease': similar_disease,
-            'treatment': cleaned_treatment_plan,
+            'treatment': treatment_plan,
             'doctors': doctor_info
         })
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-
-
-# Run the Flask app
-if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
-
-
-
-
-
-
 
 
 if __name__ == '__main__':
