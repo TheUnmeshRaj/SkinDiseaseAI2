@@ -114,6 +114,8 @@ function InputText(props) {
               <div key={docIndex} className="doctor-card">
                 <h3>{doctor.name}</h3>
                 <p><strong>Qualifications:</strong> {doctor.qualifications || "Not available"}</p>
+                {/* <p><strong>Specializations:</strong> {doctor.specializations || "Not available"}</p> */}
+                {/* <p><strong>Experience:</strong> {doctor.experience || "Not available"}</p> */}
                 <p><strong>Clinics:</strong> {doctor.clinics.join(', ') || "Not available"}</p>
                 <a href={doctor.link} target="_blank" rel="noopener noreferrer" className="doctor-link">View Profile</a>
               </div>
