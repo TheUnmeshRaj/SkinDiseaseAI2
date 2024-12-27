@@ -70,6 +70,24 @@ function InputText(props) {
     setInputText(e.target.value);
   };
 
+  // Function to format the treatment plan
+  const formatTreatment = (treatmentText) => {
+    const paragraphs = treatmentText.split("\n").filter(paragraph => paragraph.trim() !== "");
+
+    return paragraphs.map((para, index) => {
+      if (para.includes(":")) {
+        return (
+          <div key={index}>
+            <h3>{para.split(":")[0]}</h3>
+            <p>{para.split(":")[1]}</p>
+          </div>
+        );
+      } else {
+        return <p key={index}>{para}</p>;
+      }
+    });
+  };
+
   const renderFunc = () => {
     if (mainRes.length === 0) {
       return (
@@ -86,7 +104,8 @@ function InputText(props) {
         </div>
         <div className="res-desc-box">
           <h1 className="res">{`RESULT: ${item.res.toUpperCase()}`}</h1>
-          <p className="treatment">{item.desc}</p>
+          {/* Format the treatment here */}
+          <div className="treatment">{formatTreatment(item.desc)}</div>
         </div>
         {item.doctors.length > 0 && (
           <div className="doctor-details">

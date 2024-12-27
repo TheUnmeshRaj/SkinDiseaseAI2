@@ -162,6 +162,43 @@ h1, h2, p {
   color: #09488b; 
   font-weight: 600; 
 }
+.treatment-plan {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 20px;
+}
+
+.treatment-plan h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.treatment-plan h3 {
+  font-size: 20px;
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.treatment-plan p {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.treatment-plan ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.treatment-plan ul li {
+  margin-bottom: 10px;
+}
+
+.treatment-plan strong {
+  font-weight: bold;
+}
 
 .ip-search {
   display: flex;
