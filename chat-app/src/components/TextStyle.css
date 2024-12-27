@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f9f9f9;
-    background-image: url("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/src/components/InputText/decent.gif");
+    background-image: url("C:\Users\unmes\OneDrive\Desktop\EL\SkinDiseaseAI2\chat-app\src\components\InputText\assets\decent.gif");
     background-position: center;
     background-size: cover; /* Ensures background image covers the entire body */
     min-height: 100vh; /* Ensures the body takes up the entire height of the viewport */

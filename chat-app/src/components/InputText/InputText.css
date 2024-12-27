@@ -4,7 +4,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #f9f9f9;
-  background-image: url("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/src/components/InputText/check.gif");
+  background-image: url("C:\Users\unmes\OneDrive\Desktop\EL\SkinDiseaseAI2\chat-app\src\components\InputText\assets\eath.gif");
   
 }
 
@@ -24,7 +24,7 @@ h1, h2, p {
 
 .header {
   text-align: center;
-  padding: 20px;
+  padding: 10px;
   color: #fff;
   width: 100%;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
@@ -49,7 +49,7 @@ h1, h2, p {
 
 .input-text, .input-file {
   padding: 10px;
-  margin: 10px 0;
+  margin: 0px 0;
   width: 300px;
   border: 1px solid #f00000;
   border-radius: 4px;
@@ -112,7 +112,7 @@ h1, h2, p {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: url("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/src/components/InputText/ok.gif");
+  background-image: url("C:\Users\unmes\OneDrive\Desktop\EL\SkinDiseaseAI2\chat-app\src\components\InputText\assets\ok.gif");
   background-size: cover;
   background-position: center;
   opacity: 0;
@@ -124,8 +124,9 @@ h1, h2, p {
 }
 
 .res-box {
-  background-image: url("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/src/components/InputText/check.gif");
-  
+  background-image: url("C:\Users\unmes\OneDrive\Desktop\EL\SkinDiseaseAI2\chat-app\src\components\InputText\assets\oknice.gif");
+  background-position: center;
+  background-size: auto;
   display: flex;
   flex-direction: column;
   margin-top: 70px; 

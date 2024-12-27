@@ -124,6 +124,7 @@ def GenResult():
     try:
         
         similar_disease = find_similar_disease(input_query)
+        diesase=similar_disease
         treatment_plan = find_treatment_plan(similar_disease)
         treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")
 
@@ -139,7 +140,7 @@ def GenResult():
         doctor_info = fetchDoctors(location, query, mode, backupQuery, backupMode, locality)
 
         return jsonify({
-            'disease': similar_disease,
+            'disease': diesase,
             'treatment': treatment_plan,
             'doctors': doctor_info
         })
