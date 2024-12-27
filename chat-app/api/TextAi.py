@@ -124,6 +124,7 @@ def GenResult():
     try:
         
         similar_disease = find_similar_disease(input_query)
+        print("Detected disease:", similar_disease)
         diesase=similar_disease
         treatment_plan = find_treatment_plan(similar_disease)
         treatment_plan = treatment_plan.replace("*", "").replace(":", ":\n").replace(". ", ".\n")

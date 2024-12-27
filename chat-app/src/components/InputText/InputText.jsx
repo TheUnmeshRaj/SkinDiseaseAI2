@@ -23,10 +23,10 @@ function InputText(props) {
     axios.post("http://127.0.0.1:5000/api/TextAi", data)
       .then((response) => {
         const result = response.data;
-        // Ensure doctors exist in response
+        console.log("API Response:", response.data); // Check response structure
         const dataPack = { 
           query: inputText, 
-          res: result.result || "No result found", // Fallback if no result
+          res: result.disease  || "Disease might be", // Fallback if no result
           desc: result.treatment || "No treatment found", // Fallback if no treatment
           doctors: result.doctors || []  // Add doctors' info to the result
         };
