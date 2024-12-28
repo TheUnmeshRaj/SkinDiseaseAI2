@@ -10,28 +10,23 @@ from sklearn.metrics.pairwise import cosine_similarity
 from torchvision import models, transforms
 from transformers import AutoModel, AutoTokenizer
 
-# Flask app setup
 app = Flask(__name__)
 CORS(app)
 
-# Load datasets
 dataset = load_dataset("Mostafijur/Skin_disease_classify_data")
 dataset1 = load_dataset("brucewayne0459/Skin_diseases_and_care")
 
-# Load models and tokenizers
 tokenizer1 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-detection")
 model1 = AutoModel.from_pretrained("Unmeshraj/skin-disease-detection")
 tokenizer2 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
 model2 = AutoModel.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
 
-# Embedding function
 def embed_text(text, tokenizer, model):
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
     with torch.no_grad():
         outputs = model(**inputs)
     return outputs.last_hidden_state.mean(dim=1)
 
-# Precompute embeddings for diseases
 queries, diseases, embeddings = [], [], []
 for example in dataset['train']:
     query = example['Skin_disease_classification']['query']
@@ -41,7 +36,6 @@ for example in dataset['train']:
     query_embedding = embed_text(query, tokenizer1, model1)
     embeddings.append(query_embedding)
 
-# Precompute embeddings for treatment topics
 topics, information, topic_embeddings = [], [], []
 for example in dataset1['train']:
     topic = example['Topic']
@@ -51,7 +45,6 @@ for example in dataset1['train']:
     topic_embedding = embed_text(topic, tokenizer2, model2)
     topic_embeddings.append(topic_embedding)
 
-# Disease similarity function
 def find_similar_disease(input_query):
     input_embedding = embed_text(input_query, tokenizer1, model1)
     similarities = [
@@ -60,7 +53,6 @@ def find_similar_disease(input_query):
     ]
     return diseases[similarities.index(max(similarities))]
 
-# Treatment plan function
 def find_treatment_plan(disease_name):
     disease_embedding = embed_text(disease_name, tokenizer2, model2)
     similarities = [
@@ -69,7 +61,6 @@ def find_treatment_plan(disease_name):
     ]
     return information[similarities.index(max(similarities))]
 
-# Fetch doctor details from Practo
 def fetchDoctors(location, query, mode, backupQuery, backupMode, locality):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0 Safari/537.36"
@@ -145,10 +136,8 @@ def fetchDoctors(location, query, mode, backupQuery, backupMode, locality):
 
         doctors_info.append(doctor_info)
 
-    # Return a random subset of doctors
     return random.sample(doctors_info, min(3, len(doctors_info)))
 
-# API endpoint for disease detection and doctor details
 @app.route('/api/TextAi', methods=['POST'])
 def GenResult():
     data = request.get_json()
@@ -178,6 +167,5 @@ def GenResult():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Run the Flask app
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5001)

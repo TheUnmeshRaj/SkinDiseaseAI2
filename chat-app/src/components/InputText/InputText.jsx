@@ -20,7 +20,7 @@ function InputText(props) {
 
   const fetchRes = () => {
     const data = { inputText };
-    axios.post("http://127.0.0.1:5000/api/TextAi", data)
+    axios.post("http://127.0.0.1:5001/api/TextAi", data)
       .then((response) => {
         const result = response.data;
         console.log("API Response:", response.data); // Check response structure
@@ -116,7 +116,23 @@ function InputText(props) {
                 <p><strong>Qualifications:</strong> {doctor.qualifications || "Not available"}</p>
                 {/* <p><strong>Specializations:</strong> {doctor.specializations || "Not available"}</p> */}
                 {/* <p><strong>Experience:</strong> {doctor.experience || "Not available"}</p> */}
-                <p><strong>Clinics:</strong> {doctor.clinics.join(', ') || "Not available"}</p>
+                <p>
+  {doctor.clinics && doctor.clinics.length > 0 ? (
+    <div>
+      <h3>Clinics</h3>
+      <ol style={{ paddingLeft: "20px" }}>
+        {doctor.clinics.map((clinic, index) => (
+          <li key={index} style={{ marginBottom: "8px" }}>
+            {clinic}
+          </li>
+        ))}
+      </ol>
+    </div>
+  ) : (
+    "Not available"
+  )}
+</p>
+
                 <a href={doctor.link} target="_blank" rel="noopener noreferrer" className="doctor-link">View Profile</a>
               </div>
             ))}
