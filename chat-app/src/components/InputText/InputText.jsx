@@ -3,6 +3,8 @@ import '../TextStyle.css';
 import './InputText.css';
 import axios from 'axios';
 import NoteContext from '../NoteContext';
+import googlePoint from './assets/googlePoint.png';
+
 import magnifyingGlass from '../images/searchIcon.png';
 
 const headingTxt = "Welcome to our Skin Disease Detection AI";
@@ -120,13 +122,30 @@ function InputText(props) {
   {doctor.clinics && doctor.clinics.length > 0 ? (
     <div>
       <h3>Clinics</h3>
-      <ol style={{ paddingLeft: "20px" }}>
-        {doctor.clinics.map((clinic, index) => (
-          <li key={index} style={{ marginBottom: "8px" }}>
+      {doctor.clinics.map((clinic, index) => {
+        const baseAddress =
+          "R.+V.+College+of+Engineering,+Mysore+Rd,+RV+Vidyaniketan,+Post,+Bengaluru,+Karnataka+560059,+India";
+        const encodedClinic = encodeURIComponent(clinic);
+        const googleMapsURL = `https://www.google.com/maps/dir/${baseAddress}/${encodedClinic}/@12.9160575,77.5054058,15z/data=!4m14!4m13!1m5!1m1!1s0x3bae3ee159ba3729:0x75a3463d510cf26e!2m2!1d77.4987012!2d12.9237228!1m5!1m1!1s0x3bae14824624a8b9:0x6d9e06c14ac07d57!2m2!1d77.6515047!2d12.9174417!3e3?entry=ttu&g_ep=EgoyMDI0MTIxMS4wIKXMDSoASAFQAw%3D%3D`;
+
+        return (
+          <div key={index} style={{ marginBottom: "8px" }}>
+            <a
+              href={googleMapsURL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src={googlePoint}
+                alt="Map Icon"
+                style={{ width: "20px", position: "relative", top: "-2px", left:"3px"}}
+                className="map-icon"
+              />
+            </a>
             {clinic}
-          </li>
-        ))}
-      </ol>
+          </div>
+        );
+      })}
     </div>
   ) : (
     "Not available"
