@@ -1,4 +1,3 @@
-
 body {
   font-family: 'Roboto', sans-serif;
   margin: 0;
@@ -6,8 +5,66 @@ body {
   background-color: #f9f9f9;
   background-image: url("C:\Users\unmes\OneDrive\Desktop\EL\SkinDiseaseAI2\chat-app\src\components\InputText\assets\fine.gif");
   background-size: auto;
+  background-position: center;
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  overflow: hidden;
   
 }
+
+html, body {
+  height: 100%; 
+  overflow: hidden; 
+}
+
+.treatment-plan {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 20px;
+}
+
+.treatment-plan h2, .treatment-plan h3 {
+  margin-bottom: 10px;
+}
+
+.treatment-plan h2 {
+  font-size: 24px;
+  color: #333;
+}
+
+.treatment-plan h3 {
+  font-size: 20px;
+  color: #555;
+  margin-top: 20px;
+}
+
+.treatment-plan p, .treatment-plan ul li {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.treatment-plan ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.treatment-plan strong {
+  font-weight: bold;
+}
+
+.treatment-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.treatment {
+  width: calc(48vw * 1.5);
+  text-align: left;
+}
+
 
 h1, h2, p {
   margin: 0;
@@ -128,6 +185,114 @@ h1, h2, p {
   opacity: 0.3; 
 }
 
+.ip-search {
+  display: flex;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20px;
+  width: 60%;
+  height: 40px;
+  margin-top: 10px; 
+}
+
+.ip {
+  width: 100%;
+  height: 40px;
+  border-radius: 20px;
+  padding-left: 10px;
+  border: 2px solid black;
+}
+
+
+.search-button {
+  position: absolute;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #2d525d, #c4f1fe, #a3ceda);
+
+  transform: translateX(0%) scale(1.1); 
+  
+  right:9px;
+  top: 67%;
+  margin-top: -22px;
+  padding: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease,  0.3s ease;
+}
+
+.search-button:hover {
+  cursor: pointer;
+  transform: translateX(0%) scale(1.16);
+  background: linear-gradient(45deg,  #c4f1fe, #a3ceda,#2d525d);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.magnifying-glass {
+  width: 100%;
+  height: 100%;
+  background:image("SkinDiseaseAI2\chat-app\src\components\images\searchIcon.png") no-repeat center;
+  background-size: 70%;
+  transition: transform 0.3s ease;
+}
+
+.search-button:hover .magnifying-glass {
+  transform: rotate(360deg);
+}
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  width: 35px;
+  height: 35px;
+}
+
+.spinner {
+  border: 4px solid transparent;
+  border-top: 4px solid #2196f3;
+  border-radius: 50%;
+  width: 100%;
+  height: 100%;
+  animation: spin 1s linear infinite;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.query-box {
+  align-self: flex-end;
+  border-radius: 30px; 
+  border: 1px solid rgba(0, 0, 0, 0.1); 
+  background: linear-gradient(145deg, #38d9a9, #2e8b72); 
+  padding: 14px 20px; 
+  margin-left: 12px; 
+  max-width: fit-content;
+  color: white; 
+  font-size: 16px; 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
+  transition: all 0.3s ease; 
+}
+
+.query-box:hover {
+  background: linear-gradient(145deg, #32b59b, #249f7d); 
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); 
+}
+
 .res-box {
   background-image: url("C:\Users\unmes\OneDrive\Desktop\EL\SkinDiseaseAI2\chat-app\src\components\InputText\assets\oknice.gif");
   background-position: center;
@@ -167,79 +332,27 @@ h1, h2, p {
   color: #09488b; 
   font-weight: 600; 
 }
-.treatment-plan {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  margin: 20px;
-}
 
-.treatment-plan h2 {
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.treatment-plan h3 {
-  font-size: 20px;
-  color: #555;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.treatment-plan p {
-  font-size: 16px;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-.treatment-plan ul {
-  list-style-type: disc;
-  margin-left: 20px;
-}
-
-.treatment-plan ul li {
-  margin-bottom: 10px;
-}
-
-.treatment-plan strong {
-  font-weight: bold;
-}
-
-.ip-search {
+.res-desc-box {
   display: flex;
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: 20px;
-  width: 60%;
-  height: 40px;
-  margin-top: 10px; 
+  flex-direction: column;
+  row-gap: 14px; 
+  border-radius: 30px; 
+  background: linear-gradient(145deg, #f7f7f7, #e2e2e2); 
+  padding: 18px 24px; 
+  max-width: fit-content;
+  color: #333; 
+  font-size: 16px; 
+  border: 1px solid rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); 
+  margin-bottom: 16px; 
+  transition: all 0.3s ease; 
 }
 
-.ip {
-  width: 100%;
-  height: 40px;
-  border-radius: 20px;
-  padding-left: 10px;
-  border: 2px solid black;
+.res-desc-box:hover {
+  background: linear-gradient(145deg, #e2e2e2, #d4d4d4); 
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); 
 }
-
-
-.submit-button {
-  padding: 10px 20px;
-  background-color: #a4aab0;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.submit-button:hover {
-  background-color: #357ab8;
-}
-
-
 .results {
   display: flex;
   flex-direction: column;
@@ -270,12 +383,14 @@ h1, h2, p {
   color: #555;
 }
 
-
-.footer {
-  text-align: center;
-  padding: 10px;
-  background-color: #333;
-  color: #fff;
-  width: 100%;
-  font-size: 0.9rem;
+.hed-ini{
+    margin-left: 10px;
+    font-size: 30px;
+}
+.explain-ini{
+    margin-left: 10px;
+    width: calc(56vw * 1.5);
+    font-size: 20px;
+    height: auto;
+    text-align: left;
 }

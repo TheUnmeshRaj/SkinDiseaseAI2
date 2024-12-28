@@ -4,8 +4,9 @@ import requests
 import torch
 from bs4 import BeautifulSoup
 from datasets import load_dataset
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request  # type: ignore
 from flask_cors import CORS
+from PIL import Image  # type: ignore
 from sklearn.metrics.pairwise import cosine_similarity
 from torchvision import models, transforms
 from transformers import AutoModel, AutoTokenizer
@@ -15,11 +16,25 @@ CORS(app)
 
 dataset = load_dataset("Mostafijur/Skin_disease_classify_data")
 dataset1 = load_dataset("brucewayne0459/Skin_diseases_and_care")
+device = torch.device('cpu')
+classes = {0: 'Acne and Rosacea', 1: 'Actinic Keratosis Basal Cell Carcinoma', 
+           2: 'Nail Fungus', 3: 'Psoriasis Lichen Planus', 4: 'Seborrheic Keratoses', 
+           5: 'Tinea Ringworm Candidiasis', 6: 'Warts Molluscum'}
 
 tokenizer1 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-detection")
 model1 = AutoModel.from_pretrained("Unmeshraj/skin-disease-detection")
 tokenizer2 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
 model2 = AutoModel.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
+image_model = models.resnet18(pretrained=False)
+image_model.fc = torch.nn.Linear(image_model.fc.in_features, len(classes))
+image_model.load_state_dict(torch.load("SkinDiseaseAI2/chat-app/api/model.pth", map_location=device))
+image_model.eval()
+
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+    transforms.Normalize([0.5], [0.5])
+])
 
 def embed_text(text, tokenizer, model):
     inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True)
@@ -61,11 +76,12 @@ def find_treatment_plan(disease_name):
     ]
     return information[similarities.index(max(similarities))]
 
-import random
-
-import requests
-from bs4 import BeautifulSoup
-
+def predict_image(img):
+    img_tensor = transform(img).unsqueeze(0).to(device)
+    with torch.no_grad():
+        outputs = image_model(img_tensor)
+        _, predicted = torch.max(outputs, 1)
+    return classes[predicted.item()]
 
 def fetchDoctors(location, query, mode, backupQuery, backupMode, locality):
     headers = {
@@ -150,8 +166,6 @@ def fetchDoctors(location, query, mode, backupQuery, backupMode, locality):
 
     return random.sample(doctors_info, min(3, len(doctors_info)))
 
-
-
 @app.route('/api/TextAi', methods=['POST'])
 def GenResult():
     data = request.get_json()
@@ -180,6 +194,18 @@ def GenResult():
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@app.route('/api/ImageAi', methods=['POST'])
+def image_ai():
+    if 'file' not in request.files:
+        return jsonify({'error': 'No file uploaded'}), 400
+
+    file = request.files['file']
+    image = Image.open(file.stream).convert('RGB')
+    predicted_disease = predict_image(image)
+
+    treatment = "Consult a dermatologist for this condition."
+    return jsonify({'result': predicted_disease, 'treatment': treatment})
 
 if __name__ == '__main__':
     app.run(debug=True,port=5001)

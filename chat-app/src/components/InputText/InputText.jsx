@@ -1,5 +1,4 @@
 import React, { useState, useContext } from 'react';
-import '../TextStyle.css';
 import './InputText.css';
 import axios from 'axios';
 import NoteContext from '../NoteContext';
