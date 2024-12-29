@@ -27,7 +27,7 @@ tokenizer2 = AutoTokenizer.from_pretrained("Unmeshraj/skin-disease-treatment-pla
 model2 = AutoModel.from_pretrained("Unmeshraj/skin-disease-treatment-plan")
 image_model = models.resnet18(pretrained=False)
 image_model.fc = torch.nn.Linear(image_model.fc.in_features, len(classes))
-image_model.load_state_dict(torch.load("SkinDiseaseAI2/chat-app/api/model.pth", map_location=device))
+image_model.load_state_dict(torch.load("C:/Users/unmes/OneDrive/Desktop/EL/SkinDiseaseAI2/chat-app/api/model.pth", map_location=device))
 image_model.eval()
 
 transform = transforms.Compose([
