@@ -174,9 +174,14 @@ const [selectedImage, setSelectedImage] = useState(null);
       <div className="res-box">
         {renderFunc()}
       </div>
-      <div className="ip-search">
+      
+      
+  <div className="ip-search">
   {/* Upload Button for Image */}
-  <button className="upload-button" onClick={() => document.getElementById('imageInput').click()}>
+  <button 
+    className="upload-button" 
+    onClick={() => window.open('http://localhost:3001', '_blank')}
+  >
     <img src={clipIcon} alt="Upload" className="upload-icon" />
   </button>
   
