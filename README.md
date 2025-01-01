@@ -5,3 +5,4 @@ Making a website for Skin Dieasese detection AI
   <source src="Working.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
+[![Video Title](https://img.youtube.com/vi/YfhZoGXxPKw/maxresdefault.jpg)](https://www.youtube.com/watch?v=YfhZoGXxPKw)
